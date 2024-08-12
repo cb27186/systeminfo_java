@@ -1,5 +1,5 @@
 //
-//Version 1.0
+//Version 1.1
 //Author: Christian Böö
 //
 //Dieses Script sammelt Systeminformationen und speichert sie als txt-File auf dem Flipper Zero USB-Stick
@@ -12,7 +12,7 @@ let storage = require("storage");
 let dialog = require("dialog");
 //Infos zum USB-Image
 let image = "/ext/apps_data/mass_storage/Cb.img";
-let size = 16 * 1024 * 1024; // 16 MB
+let size = 8 * 1024 * 1024; // 8 MB
 //Tastaturspracheinstellungen
 //ACHTUNG MUSS ZU DEN PC EINSTELLUNGEN PASSEN
 let layout = "de-DE";
@@ -28,7 +28,7 @@ if (storage.exists(image)) {
 
 // BadUSB-verbindung herstellen mit dem unter "layout" definierten Layout
 badusb.setup({ vid: 0xAAAA, pid: 0xBBBB, mfr_name: "Flipper", prod_name: "Zero", layout_path: "/ext/badusb/assets/layouts/" + layout + ".kl" });
-print("Waiting for connection");
+print("Warte auf verbindung....");
 while (!badusb.isConnected()) {
     delay(1000);
 }
@@ -36,7 +36,7 @@ while (!badusb.isConnected()) {
 dialog.message("Systeminfos lesen", "OK zum Starten");
 
 //Ausführen öffnen
-print ("Ausführen öffnen...");
+print ("Ausfuehren oeffnen...");
 badusb.press("GUI","r");
 delay(500);
 
@@ -56,12 +56,12 @@ badusb.println("systeminfo > sysinfo.txt");
 delay (3000);
 
 //cmd schließen
-print ("CMD schließen.....");
+print ("CMD schlieszen.....");
 badusb.press("ALT","F4");
 delay (500);
 
 //powershell öffnen
-print ("Powershell öffnen....");
+print ("Powershell oeffnen....");
 badusb.press("GUI","r");
 delay (500);
 badusb.println("powershell");
@@ -74,7 +74,7 @@ print ("Bad-USB trennen....");
 delay (2000);
 usbdisk.start(image);
 print ("USB-Stick laden....");
-print ("Wenn Powershell geschlossen USB bitte auswerfen lassen.....");
+print ("Wenn Powershell geschlossen wurde, USB bitte auswerfen lassen.....");
 
 while (!usbdisk.wasEjected()) {
     delay(1000);
