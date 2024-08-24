@@ -1,2 +1,2 @@
 # systeminfo_java
- Systeminfo auslesen und als txt-Datei auf dem Flipper speichern
+ This Script collects System information and saves it as an txt-File on the Flipper Zero USB-Stick
