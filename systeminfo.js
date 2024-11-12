@@ -9,7 +9,7 @@
 let badusb = require("badusb");
 let usbdisk = require("usbdisk");
 let storage = require("storage");
-let dialog = require("dialog");
+let dialog = require("gui/dialog");
 //Infos zum USB-Image
 let image = "/ext/apps_data/mass_storage/Cb.img";
 let size = 8 * 1024 * 1024; // 8 MB
